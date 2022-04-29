@@ -1,0 +1,21 @@
+{
+  "textureAtlas": {
+    "texture": "E:\\Assets\\UI & Sprites\\Tiny Tales\\tinytales_beastmennpcspritepack\\Tiny_Tales_Beastmen_NPC_1.0\\Original\\Cat_F2.png",
+    "regionWidth": 16,
+    "regionHeight": 20
+  },
+  "cycles": {
+    "walk Down": {
+      "frames": [0,1,2]
+    },
+    "walk Left": {
+      "frames": [3,4,5]
+    },
+    "walk Right": {
+      "frames": [6,7,8]
+    },
+    "walk Up": {
+      "frames": [9,10,11]
+    }
+  }
+}
