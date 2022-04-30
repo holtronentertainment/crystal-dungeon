@@ -12,6 +12,8 @@ namespace crystal.dungeon.Systems
         private ComponentMapper<Button> _buttonMapper;
         private OrthographicCamera _camera;
 
+        private bool _clickReleased;
+
         public ButtonSystem(OrthographicCamera camera) : base(Aspect.All(typeof(Button)))
         {
             _camera = camera;
@@ -32,8 +34,9 @@ namespace crystal.dungeon.Systems
                 if(button.CollisionBox.Contains(_camera.ScreenToWorld(new Vector2(mouseState.X, mouseState.Y))))
                 {
                     button.Hovered = true;
-                    if (mouseState.LeftButton == ButtonState.Pressed && button.Method != null)
+                    if (_clickReleased && mouseState.LeftButton == ButtonState.Pressed && button.Method != null)
                     {
+                        _clickReleased = false;
                         button.Method();
                     }
                 }
@@ -41,6 +44,11 @@ namespace crystal.dungeon.Systems
                 {
                     button.Hovered = false;
                 }
+            }
+
+            if(Mouse.GetState().LeftButton == ButtonState.Released)
+            {
+                _clickReleased = true;
             }
         }
 

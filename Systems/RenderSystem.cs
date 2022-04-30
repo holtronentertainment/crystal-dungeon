@@ -39,7 +39,7 @@ namespace crystal.dungeon.Systems
 
         public override void Draw(GameTime gameTime)
         {
-            _graphicsDevice.Clear(Color.DarkSlateGray);
+            _graphicsDevice.Clear(Color.Transparent);
             _spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
             foreach(var entity in ActiveEntities)
@@ -58,11 +58,13 @@ namespace crystal.dungeon.Systems
                     var button = _buttonMapper.Get(entity);
                     if (button.Hovered)
                     {
-                        _spriteBatch.FillRectangle(button.CollisionBox, button.HoverColor);
+                        _spriteBatch.Draw(button.HoveredTexture, button.CollisionBox, Color.White);
+                        //_spriteBatch.FillRectangle(button.CollisionBox, button.HoverColor);
                     }
                     else
                     {
-                        _spriteBatch.FillRectangle(button.CollisionBox, button.DefaultColor);
+                        _spriteBatch.Draw(button.DefaultTexture, button.CollisionBox, Color.White);
+                        //_spriteBatch.FillRectangle(button.CollisionBox, button.DefaultColor);
                     }
 
                     _spriteBatch.DrawString(button.Font, button.Text, new Vector2(button.CollisionBox.Left + 10, button.CollisionBox.Top + 10), button.TextColor);

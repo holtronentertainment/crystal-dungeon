@@ -11,12 +11,10 @@ namespace crystal.dungeon.Screens
     public class MenuScreen : GameScreen
     {
         private new Game1 Game => (Game1)base.Game;
-        private SpriteFont _spriteFont;
         private List<int> _screenEntities;
 
-        public MenuScreen(Game game, SpriteFont spriteFont) : base(game)
+        public MenuScreen(Game game) : base(game)
         {
-            _spriteFont = spriteFont;
             _screenEntities = new List<int>();
         }
 
@@ -29,10 +27,10 @@ namespace crystal.dungeon.Screens
         {
             base.Initialize();
             var titleTextEntity = Game.World.CreateEntity();
-            titleTextEntity.Attach(new TextComponent(_spriteFont, "Crystal Dungeon", new Transform2(new Vector2(10, 10), 0, Vector2.One), Color.Black));
+            titleTextEntity.Attach(new TextComponent(Game.Font, "Crystal Dungeon", new Transform2(new Vector2(10, 10), 0, Vector2.One), Color.Red));
             _screenEntities.Add(titleTextEntity.Id);
-            _screenEntities.Add(PlayerSystem.CreatePlayer(Game.World, Game.Content));
-            _screenEntities.Add(ButtonSystem.CreateButtonEntity(Game.World, new Button("Single Player", Color.Black, Color.Blue, Color.LightBlue, new Rectangle(new Point(100, 200), new Point(200, 100)), _spriteFont, LoadSinglePlayerMenu)));
+            //_screenEntities.Add(PlayerSystem.CreatePlayer(Game.World, Game.Content));
+            _screenEntities.Add(ButtonSystem.CreateButtonEntity(Game.World, new Button("Single Player", Color.Black, Game.DefaultBtnTexture, Game.HoverBtnTexture, Game.DisabledBtnTexture, new Rectangle(new Point(100, 200), new Point(200, 100)), Game.Font, LoadSinglePlayerMenu)));
         }
 
         public override void Draw(GameTime gameTime)
@@ -47,12 +45,12 @@ namespace crystal.dungeon.Screens
 
         private void LoadSinglePlayerMenu()
         {
-            foreach(var entity in _screenEntities)
+            foreach (var entity in _screenEntities)
             {
                 Game.World.DestroyEntity(entity);
             }
 
-            Game.ScreenManager.LoadScreen(new SinglePlayerMenuScreen(Game, _spriteFont));
+            Game.ScreenManager.LoadScreen(new SinglePlayerMenuScreen(Game));
         }
     }
 }

@@ -17,8 +17,12 @@ namespace crystal.dungeon
         public SpriteBatch SpriteBatch;
         public World World;
 
+        public Texture2D DefaultBtnTexture;
+        public Texture2D HoverBtnTexture;
+        public Texture2D DisabledBtnTexture;
+        public SpriteFont Font;
+
         private readonly GraphicsDeviceManager _graphics;
-        private SpriteFont _spriteFont;
         private OrthographicCamera _camera;
 
         public Game1()
@@ -46,7 +50,7 @@ namespace crystal.dungeon
 
             World = new WorldBuilder()
                 .AddSystem(new RenderSystem(Window, GraphicsDevice, _camera))
-                .AddSystem(new PlayerSystem(Content))
+                .AddSystem(new PlayerSystem(Content, _camera))
                 .AddSystem(new ButtonSystem(_camera))
                 .Build();
             Components.Add(World);
@@ -58,7 +62,10 @@ namespace crystal.dungeon
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _spriteFont = Content.Load<SpriteFont>("Fonts/KenneyFuture");
+            Font = Content.Load<SpriteFont>("Fonts/KenneyFuture");
+            DefaultBtnTexture = Content.Load<Texture2D>("MenuItems/Btn_stnd");
+            HoverBtnTexture = Content.Load<Texture2D>("MenuItems/Btn_over");
+            DisabledBtnTexture = Content.Load<Texture2D>("MenuItems/Btn_off");
         }
 
         protected override void Update(GameTime gameTime)
@@ -82,7 +89,7 @@ namespace crystal.dungeon
 
         private void LoadMenuScreen()
         {
-            ScreenManager.LoadScreen(new MenuScreen(this, _spriteFont), new FadeTransition(GraphicsDevice, Color.Black));
+            ScreenManager.LoadScreen(new MenuScreen(this), new FadeTransition(GraphicsDevice, Color.Black));
         }
     }
 }
