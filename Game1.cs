@@ -1,19 +1,25 @@
 ﻿using crystal.dungeon.Screens;
+using crystal.dungeon.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
-using MonoGame.Extended.Sprites;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace crystal.dungeon
 {
     public class Game1 : Game
     {
+        public readonly ScreenManager ScreenManager;
         public SpriteBatch SpriteBatch;
+        public World World;
 
         private readonly GraphicsDeviceManager _graphics;
-        private readonly ScreenManager _screenManager;
+        private SpriteFont _spriteFont;
+        private OrthographicCamera _camera;
 
         public Game1()
         {
@@ -21,16 +27,29 @@ namespace crystal.dungeon
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            _screenManager = new ScreenManager();
+            ScreenManager = new ScreenManager();
 
-            Components.Add(_screenManager);
+            Components.Add(ScreenManager);
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
+
+            _graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
+
+            var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1280, 720);
+            _camera = new OrthographicCamera(viewportAdapter);
+
+            World = new WorldBuilder()
+                .AddSystem(new RenderSystem(Window, GraphicsDevice, _camera))
+                .AddSystem(new PlayerSystem(Content))
+                .AddSystem(new ButtonSystem(_camera))
+                .Build();
+            Components.Add(World);
 
             LoadMenuScreen();
         }
@@ -39,7 +58,7 @@ namespace crystal.dungeon
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            _spriteFont = Content.Load<SpriteFont>("Fonts/KenneyFuture");
         }
 
         protected override void Update(GameTime gameTime)
@@ -47,7 +66,7 @@ namespace crystal.dungeon
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            World.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -56,14 +75,14 @@ namespace crystal.dungeon
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            World.Draw(gameTime);
 
             base.Draw(gameTime);
         }
 
         private void LoadMenuScreen()
         {
-            _screenManager.LoadScreen(new MenuScreen(this), new FadeTransition(GraphicsDevice, Color.Black));
+            ScreenManager.LoadScreen(new MenuScreen(this, _spriteFont), new FadeTransition(GraphicsDevice, Color.Black));
         }
     }
 }
