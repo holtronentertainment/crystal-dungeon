@@ -18,7 +18,6 @@ namespace crystal.dungeon.Systems
         private OrthographicCamera _camera;
         private ComponentMapper<AnimatedSprite> _spriteMapper;
         private ComponentMapper<Player> _playerMapper;
-        private ComponentMapper<Transform2> _transformMapper;
 
         public PlayerSystem(ContentManager contentManager, OrthographicCamera camera) : base(Aspect.All(typeof(Player)))
         {
@@ -30,7 +29,6 @@ namespace crystal.dungeon.Systems
         {
             _spriteMapper = mapperService.GetMapper<AnimatedSprite>();
             _playerMapper = mapperService.GetMapper<Player>();
-            _transformMapper = mapperService.GetMapper<Transform2>();
         }
 
         public override void Update(GameTime gameTime)
@@ -38,31 +36,30 @@ namespace crystal.dungeon.Systems
             foreach(var entity in ActiveEntities)
             {
                 var sprite = _spriteMapper.Get(entity);
-                var transform = _transformMapper.Get(entity);
                 var player = _playerMapper.Get(entity);
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     sprite.Play("Left");
-                    transform.Position += new Vector2(-1 * player.Speed, 0);
+                    player.Transform.Position += new Vector2(-1 * player.Speed, 0);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     sprite.Play("Right");
-                    transform.Position += new Vector2(1 * player.Speed, 0);
+                    player.Transform.Position += new Vector2(1 * player.Speed, 0);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
                     sprite.Play("Up");
-                    transform.Position += new Vector2(0, -1 * player.Speed);
+                    player.Transform.Position += new Vector2(0, -1 * player.Speed);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
                     sprite.Play("Down");
-                    transform.Position += new Vector2(0, 1 * player.Speed);
+                    player.Transform.Position += new Vector2(0, 1 * player.Speed);
                 }
 
-                _camera.Position = transform.Position - new Vector2(_camera.BoundingRectangle.Width / 2, _camera.BoundingRectangle.Height / 2);
+                _camera.Position = player.Transform.Position - new Vector2(_camera.BoundingRectangle.Width / 2, _camera.BoundingRectangle.Height / 2);
                 sprite.Update(gameTime);
             }
         }
@@ -79,8 +76,7 @@ namespace crystal.dungeon.Systems
             };
             var entity = world.CreateEntity();
             entity.Attach(new Player { Speed = 1});
-            entity.Attach(AnimatedSpriteBuilder.Build(texture, 16, 20, 12, 0, 0, animations));
-            entity.Attach(new Transform2(100, 100));
+            entity.Attach(AnimatedSpriteBuilder.Build("playerAtlas", texture, 16, 20, 12, 0, 0, animations));
             return entity.Id;
         }
     }

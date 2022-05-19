@@ -1,13 +1,11 @@
 ﻿using crystal.dungeon.Components;
+using crystal.dungeon.MonsterScripts;
 using crystal.dungeon.Systems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace crystal.dungeon.Screens
 {
@@ -18,7 +16,7 @@ namespace crystal.dungeon.Screens
 
         public TestScreen(Game game) : base(game)
         {
-
+            
         }
 
         public override void Initialize()
@@ -28,11 +26,16 @@ namespace crystal.dungeon.Screens
             titleTextEntity.Attach(new TextComponent(Game.Font, "Crystal Dungeon", new Transform2(new Vector2(10, 10), 0, Vector2.One), Color.Red));
             _screenEntities.Add(titleTextEntity.Id);
             _screenEntities.Add(PlayerSystem.CreatePlayer(Game.World, Game.Content));
+            
+            var kobold = new Kobold(1, new Vector2(200, 200), new Rectangle(new Point(200, 200), new Point(50, 50)));
+            var kobold2 = new Kobold(1, new Vector2(250, 250), new Rectangle(new Point(200, 200), new Point(50, 50)));
+            _screenEntities.Add(MonsterSystem.SpawnMonster(kobold, Game.Content.Load<Texture2D>("SpriteSheets/Kobold_1"), Game.World));
+            _screenEntities.Add(MonsterSystem.SpawnMonster(kobold2, Game.Content.Load<Texture2D>("SpriteSheets/Kobold_1"), Game.World));
         }
 
         public override void Update(GameTime gameTime)
         {
-            
+
         }
 
         public override void Draw(GameTime gameTime)

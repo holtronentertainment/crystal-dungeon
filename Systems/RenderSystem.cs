@@ -19,6 +19,8 @@ namespace crystal.dungeon.Systems
         private ComponentMapper<Transform2> _transformMapper;
         private ComponentMapper<TextComponent> _textMapper;
         private ComponentMapper<Button> _buttonMapper;
+        private ComponentMapper<IMonster> _monsterMapper;
+        private ComponentMapper<Player> _playerMapper;
 
         public RenderSystem(GameWindow gameWindow, GraphicsDevice graphicsDevice, OrthographicCamera camera)
             : base(Aspect.One(typeof(AnimatedSprite), typeof(TextComponent), typeof(Button)))
@@ -35,6 +37,8 @@ namespace crystal.dungeon.Systems
             _transformMapper = mapperService.GetMapper<Transform2>();
             _textMapper = mapperService.GetMapper<TextComponent>();
             _buttonMapper = mapperService.GetMapper<Button>();
+            _monsterMapper = mapperService.GetMapper<IMonster>();
+            _playerMapper = mapperService.GetMapper<Player>();
         }
 
         public override void Draw(GameTime gameTime)
@@ -51,7 +55,14 @@ namespace crystal.dungeon.Systems
                 }
                 if (_spriteMapper.Has(entity))
                 {
-                    _spriteBatch.Draw(_spriteMapper.Get(entity), _transformMapper.Get(entity));
+                    if(_playerMapper.Has(entity))
+                    {
+                        _spriteBatch.Draw(_spriteMapper.Get(entity), _playerMapper.Get(entity).Transform);
+                    }
+                    else if (_monsterMapper.Has(entity))
+                    {
+                        _spriteBatch.Draw(_spriteMapper.Get(entity), _monsterMapper.Get(entity).Transform);
+                    }
                 }
                 if (_buttonMapper.Has(entity))
                 {

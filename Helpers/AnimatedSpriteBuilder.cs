@@ -8,9 +8,9 @@ namespace crystal.dungeon.Helpers
 {
     public static class AnimatedSpriteBuilder
     {
-        public static AnimatedSprite Build(Texture2D spriteTexture, int spriteWidth, int spriteHeight, int maxFrames, int spacing, int margin, List<SpriteAnimationData> animationData)
+        public static AnimatedSprite Build(string atlasName, Texture2D spriteTexture, int spriteWidth, int spriteHeight, int maxFrames, int spacing, int margin, List<SpriteAnimationData> animationData)
         {
-            var atlas = TextureAtlas.Create("Player Animations Atlas", spriteTexture, spriteWidth, spriteHeight, maxFrames, margin, spacing);
+            var atlas = TextureAtlas.Create(atlasName, spriteTexture, spriteWidth, spriteHeight, maxFrames, margin, spacing);
 
             var spriteSheet = new SpriteSheet
             {

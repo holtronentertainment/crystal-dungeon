@@ -52,6 +52,7 @@ namespace crystal.dungeon
                 .AddSystem(new RenderSystem(Window, GraphicsDevice, _camera))
                 .AddSystem(new PlayerSystem(Content, _camera))
                 .AddSystem(new ButtonSystem(_camera))
+                .AddSystem(new MonsterSystem())
                 .Build();
             Components.Add(World);
 
