@@ -9,21 +9,19 @@ namespace crystal.dungeon.MonsterScripts
         public string Name { get; set; }
         public int Health { get; set; }
         public float Speed { get; set; }
-        public Rectangle CollisionBox { get; set; }
         public Transform2 Transform { get; set; } = new Transform2();
 
-        public Kobold(int level, Vector2 position, Rectangle collisionBox)
+        public Kobold(int level, Vector2 position)
         {
             Name = "Kobold";
             Health = 10 * level;
-            Speed = 1;
+            Speed = 30;
             Transform.Position = position;
-            CollisionBox = collisionBox;
         }
 
         public void Update(GameTime gameTime, Transform2 playerPosition)
         {
-            if (!CollisionBox.Contains(playerPosition.Position))
+            if (Vector2.Distance(playerPosition.Position, Transform.Position) > 16)
             {
                 Transform.Position += Vector2.Normalize(playerPosition.Position - Transform.Position) * Speed * gameTime.GetElapsedSeconds();
             }

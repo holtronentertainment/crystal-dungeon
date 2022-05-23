@@ -41,22 +41,22 @@ namespace crystal.dungeon.Systems
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
                     sprite.Play("Left");
-                    player.Transform.Position += new Vector2(-1 * player.Speed, 0);
+                    player.Transform.Position += new Vector2(-1 * player.Speed * gameTime.GetElapsedSeconds(), 0);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
                     sprite.Play("Right");
-                    player.Transform.Position += new Vector2(1 * player.Speed, 0);
+                    player.Transform.Position += new Vector2(1 * player.Speed * gameTime.GetElapsedSeconds(), 0);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Up))
                 {
                     sprite.Play("Up");
-                    player.Transform.Position += new Vector2(0, -1 * player.Speed);
+                    player.Transform.Position += new Vector2(0, -1 * player.Speed * gameTime.GetElapsedSeconds());
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
                     sprite.Play("Down");
-                    player.Transform.Position += new Vector2(0, 1 * player.Speed);
+                    player.Transform.Position += new Vector2(0, 1 * player.Speed * gameTime.GetElapsedSeconds());
                 }
 
                 _camera.Position = player.Transform.Position - new Vector2(_camera.BoundingRectangle.Width / 2, _camera.BoundingRectangle.Height / 2);
@@ -75,7 +75,7 @@ namespace crystal.dungeon.Systems
                 new SpriteAnimationData("Up", 9, 3, 0.2f, true, true),
             };
             var entity = world.CreateEntity();
-            entity.Attach(new Player { Speed = 1});
+            entity.Attach(new Player { Speed = 100});
             entity.Attach(AnimatedSpriteBuilder.Build("playerAtlas", texture, 16, 20, 12, 0, 0, animations));
             return entity.Id;
         }

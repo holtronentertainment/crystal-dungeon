@@ -27,8 +27,8 @@ namespace crystal.dungeon.Screens
             _screenEntities.Add(titleTextEntity.Id);
             _screenEntities.Add(PlayerSystem.CreatePlayer(Game.World, Game.Content));
             
-            var kobold = new Kobold(1, new Vector2(200, 200), new Rectangle(new Point(200, 200), new Point(50, 50)));
-            var kobold2 = new Kobold(1, new Vector2(250, 250), new Rectangle(new Point(200, 200), new Point(50, 50)));
+            var kobold = new Kobold(1, new Vector2(200, 200));
+            var kobold2 = new Kobold(1, new Vector2(250, 250));
             _screenEntities.Add(MonsterSystem.SpawnMonster(kobold, Game.Content.Load<Texture2D>("SpriteSheets/Kobold_1"), Game.World));
             _screenEntities.Add(MonsterSystem.SpawnMonster(kobold2, Game.Content.Load<Texture2D>("SpriteSheets/Kobold_1"), Game.World));
         }
